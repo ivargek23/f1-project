@@ -9,6 +9,7 @@ import hr.algebra.backendapi.model.Team;
 import hr.algebra.backendapi.repository.DriverRepository;
 import hr.algebra.backendapi.repository.TeamRepository;
 import hr.algebra.backendapi.service.DriverService;
+import hr.algebra.backendapi.utils.DriverValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
     private final TeamRepository teamRepository;
     private final DriverMapper driverMapper;
+    private final DriverValidator driverValidator;
 
     @Override
     public List<DriverResponseDto> getAllDrivers() {
@@ -29,12 +31,13 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public Optional<DriverResponseDto> getDriverById(Long id) {
-        return driverRepository.findById(id).map(driverMapper::toResponseDto);
+    public DriverResponseDto getDriverById(Long id) {
+        return driverRepository.findById(id).map(driverMapper::toResponseDto).orElseThrow(() -> new ResourceNotFoundException("Driver with id " + id + " not found"));
     }
 
     @Override
     public DriverResponseDto createDriver(DriverRequestDto driverRequestDto) {
+        driverValidator.validateCreateDriverData(driverRequestDto);
         Driver driver = driverMapper.toEntity(driverRequestDto, teamRepository.findById(driverRequestDto.getTeamId()).get());
         return driverMapper.toResponseDto(driverRepository.save(driver));
     }
@@ -50,6 +53,9 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public void deleteDriver(Long id) {
+        if (!driverRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Driver with id " + id + " not found");
+        }
         driverRepository.deleteById(id);
     }
 

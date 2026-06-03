@@ -1,6 +1,8 @@
 package hr.algebra.backendapi.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "teams")
+@Builder
+@AllArgsConstructor
 public class Team {
 
     protected Team() {}

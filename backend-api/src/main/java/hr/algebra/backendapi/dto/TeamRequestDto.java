@@ -1,6 +1,7 @@
 package hr.algebra.backendapi.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,9 @@ public class TeamRequestDto {
     private String teamChief;
     private String technicalChief;
     private String powerUnit;
+
+    @NotBlank
+    @Positive
     private Integer firstTeamEntry;
     private String teamLogoUrl;
 }

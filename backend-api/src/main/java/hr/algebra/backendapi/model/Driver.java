@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "drivers")
-@Builder
 public class Driver {
 
     @Id

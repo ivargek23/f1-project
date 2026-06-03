@@ -1,8 +1,12 @@
 package hr.algebra.backendapi.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class TeamResponseDto {
 
     private Long id;

@@ -2,7 +2,6 @@ package hr.algebra.backendapi.controller;
 
 import hr.algebra.backendapi.dto.DriverRequestDto;
 import hr.algebra.backendapi.dto.DriverResponseDto;
-import hr.algebra.backendapi.exception.ResourceNotFoundException;
 import hr.algebra.backendapi.service.DriverService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -28,12 +27,23 @@ public class DriverController {
 
     @GetMapping("/{id}")
     public ResponseEntity<@NonNull DriverResponseDto> getDriverById(@NotNull @PathVariable Long id) {
-        return ResponseEntity.ok(driverService.getDriverById(id).orElseThrow(() -> new ResourceNotFoundException("Driver with id " + id + " not found")));
+        return ResponseEntity.ok(driverService.getDriverById(id));
     }
 
     @PostMapping
-    public ResponseEntity<@NonNull DriverResponseDto> createDriver(@RequestBody @NonNull @Valid DriverRequestDto driverRequestDto) {
-        DriverResponseDto driverResponseDto = driverService.createDriver(driverRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(driverResponseDto);
+    public ResponseEntity<DriverResponseDto> createDriver(@RequestBody @Valid DriverRequestDto driverRequestDto) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(driverService.createDriver(driverRequestDto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DriverResponseDto> updateDriver(@PathVariable Long id, @RequestBody @Valid DriverRequestDto driverRequestDto) {
+        return ResponseEntity.ok(driverService.updateDriver(id, driverRequestDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteDriver(@PathVariable Long id) {
+        driverService.deleteDriver(id);
     }
 }

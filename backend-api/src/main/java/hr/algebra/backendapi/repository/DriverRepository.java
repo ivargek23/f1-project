@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DriverRepository extends JpaRepository<@NonNull Driver, @NonNull Long> {
+    boolean existsByCode(String code);
+
+    boolean existsByDriverNumber(Integer driverNumber);
 }
