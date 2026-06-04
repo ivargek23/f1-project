@@ -31,7 +31,13 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        ErrorResponse errorResponse = MessageUtils.createErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        StringBuilder sb = new StringBuilder();
+        e.getBindingResult().getFieldErrors().forEach(
+                er -> sb.append(er.getDefaultMessage())
+        );
+        String message = sb.toString();
+        ErrorResponse errorResponse = MessageUtils.createErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
