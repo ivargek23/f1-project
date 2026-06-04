@@ -4,6 +4,7 @@ import hr.algebra.backendapi.model.ErrorResponse;
 import hr.algebra.backendapi.utils.MessageUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
@@ -26,5 +27,11 @@ public class ExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicateResourceException(DuplicateResourceException e) {
         ErrorResponse errorResponse = MessageUtils.createErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        ErrorResponse errorResponse = MessageUtils.createErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
