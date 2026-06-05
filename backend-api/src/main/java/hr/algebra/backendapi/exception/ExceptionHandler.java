@@ -40,4 +40,10 @@ public class ExceptionHandler {
                 message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(DatabaseOperationException.class)
+    public ResponseEntity<ErrorResponse> handleDatabaseOperationException(DatabaseOperationException e) {
+        ErrorResponse errorResponse = MessageUtils.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
 }
